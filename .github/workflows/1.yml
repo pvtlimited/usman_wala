@@ -31,7 +31,7 @@ jobs:
     # Wait for the server to be available before running tests
     - name: Wait for server
       run: |
-        while ! curl -sSf http://host.docker.internal:4000; do
+        while ! curl -sSf http://localhost:4000; do
           echo "Waiting for the server to be available..."
           sleep 10  # Increase the waiting time to 10 seconds
         done
