@@ -18,7 +18,10 @@ jobs:
           node-version: '14'  # You can change the Node.js version if needed
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm install
+          pwd
+          echo $(pwd)=location
 
       - name: Build Docker image and push to Docker Hub
         env:
@@ -26,6 +29,7 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           DOCKER_REPO: your-docker-repo-name/image-name  # Replace with your Docker Hub repository name
         run: |
+          cd $location
           # Build Docker image
           docker build -t $DOCKER_REPO .
 
