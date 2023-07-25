@@ -27,11 +27,11 @@ jobs:
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          DOCKER_REPO: your-docker-repo-name/image-name  # Replace with your Docker Hub repository name
+          DOCKER_REPO: your-docker-repo-name/image-name:v1  # Replace with your Docker Hub repository name
         run: |
-          cd $location
+          cd /home/runner/work/usman_wala/usman_wala/
           # Build Docker image
-          docker build -t $DOCKER_REPO .
+          sudo docker build -t $DOCKER_REPO .
 
           # Log in to Docker Hub
           echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
