@@ -1,11 +1,11 @@
-name: Build and Push Docker Image
+name: Build, Push, and Deploy Docker Image
 on:
   push:
     branches:
       - main  # Adjust this branch name if needed
 
 jobs:
-  build-and-push:
+  build-push-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,7 +24,7 @@ jobs:
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          DOCKER_REPO: wallah/justme  # Replace with your Docker Hub repository name
+          DOCKER_REPO: your-docker-repo-name/image-name  # Replace with your Docker Hub repository name
         run: |
           # Build Docker image
           docker build -t $DOCKER_REPO .
