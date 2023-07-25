@@ -9,6 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container: node:14
     steps:
     - uses: actions/checkout@v3
     - name: Install dependencies
@@ -28,19 +29,12 @@ jobs:
           sleep 10  # Increase the waiting time to 10 seconds
         done
 
-    # Check if "test" script is defined in package.json
-    - run: |
-        if ! grep -q '"test":' package.json; then
-          echo "Error: 'test' script is missing in package.json"
-          exit 1
-        fi
-
     # Run the tests with error handling
     - name: Run Tests
       run: npm test
 
-    - name: Set up Docker
-      uses: docker/setup-buildx-action@v1
+    - name: Set up Docker Buildx
+      run: docker buildx create --use
 
     - name: Log in to Docker Hub
       env:
