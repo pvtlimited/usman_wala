@@ -8,21 +8,14 @@ on:
 
 jobs:
   build:
+    container: node:14
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: ["14"]
-    container:
-      image: node:${{ matrix.node-version }}
     steps:
     - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
+    - name: Install dependencies
+      run: npm ci
+    - name: Build
+      run: npm run build --if-present
 
     # Start the server in the background using nohup and &
     - name: Start Server
@@ -31,7 +24,7 @@ jobs:
     # Wait for the server to be available before running tests
     - name: Wait for server
       run: |
-        while ! curl -sSf http://localhost:4000; do
+        while ! curl -sSf http://host.docker.internal:4000; do
           echo "Waiting for the server to be available..."
           sleep 10  # Increase the waiting time to 10 seconds
         done
@@ -40,14 +33,14 @@ jobs:
     - name: Run Tests
       run: npm test
 
+    - name: Set up Docker Buildx
+      run: docker buildx create --use
+
     - name: Log in to Docker Hub
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-
-    - name: Set up Docker Buildx
-      run: docker buildx create --use
 
     - name: Build and push
       run: |
@@ -55,3 +48,4 @@ jobs:
           --push \
           --tag wallah/justme:latest \
           --platform linux/amd64,linux/arm64 \
+          .
