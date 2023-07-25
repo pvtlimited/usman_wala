@@ -12,14 +12,8 @@ jobs:
     strategy:
       matrix:
         node-version: ["14.20.x"]
-    services:
-      # Define the Node.js service that runs the server
-      server:
-        image: node:${{ matrix.node-version }}
-        ports:
-          - 3000:3000
-        entrypoint: "node" # Specify the entrypoint for the service
-        command: "server.js" # Command to run the server.js file
+    container:
+      image: node:${{ matrix.node-version }}
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
@@ -29,6 +23,11 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm run build --if-present
+
+    # Start the server as a background process
+    - name: Start Server
+      run: node server.js &
+      background: true
 
     # Wait for the server to be available before running tests
     - name: Wait for server
