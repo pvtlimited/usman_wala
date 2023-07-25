@@ -8,13 +8,10 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
-        node-version: ["14.20.x"]
-
+        node-version: ["14.20"]
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
@@ -40,4 +37,3 @@ jobs:
       with:
         push: true
         tags: wallah/justme:latest
-        dockerfile: Dockerfile  # Replace 'Dockerfile' with the actual path to your Dockerfile if it's in a different location
