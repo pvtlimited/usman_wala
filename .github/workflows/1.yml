@@ -28,6 +28,13 @@ jobs:
           sleep 10  # Increase the waiting time to 10 seconds
         done
 
+    # Check if "test" script is defined in package.json
+    - run: |
+        if ! grep -q '"test":' package.json; then
+          echo "Error: 'test' script is missing in package.json"
+          exit 1
+        fi
+
     # Run the tests with error handling
     - name: Run Tests
       run: npm test
