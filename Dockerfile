@@ -1,5 +1,5 @@
 # Use the official Node.js image as the base image with Ubuntu OS
-FROM node:14
+FROM node:14-alpine
 
 # Set the working directory inside the container
 WORKDIR /app
